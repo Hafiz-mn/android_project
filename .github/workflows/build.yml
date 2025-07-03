@@ -2,12 +2,12 @@ name: Android Release CI
 
 on:
   push:
-    tags:
-      - 'v*'  # Only runs when you push a version tag like v1.0
+    branches:
+      - main  # You push to main, workflow bumps version & tags
 
 permissions:
   contents: write
-  
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -28,7 +28,16 @@ jobs:
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
-      - name: Upload Release aPK
+      - name: Create GitHub Tag
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.1
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          tag_prefix: "v"
+
+      - name: Upload Release APK
         uses: softprops/action-gh-release@v1
         with:
           files: app/build/outputs/apk/release/*.apk
+          tag_name: ${{ steps.tag_version.outputs.new_tag }}
+
