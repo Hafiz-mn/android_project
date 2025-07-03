@@ -22,12 +22,23 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+
     buildFeatures {
         viewBinding true
+    }
+
+    // ✅ ✅ ✅ CORRECT PLACE for output filename
+    applicationVariants.all { variant ->
+        variant.outputs.all { output ->
+            def versionName = variant.versionName
+            def fileName = "app-${variant.buildType.name}-v${versionName}.apk"
+            output.outputFileName = fileName
+        }
     }
 }
 
