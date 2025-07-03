@@ -3,8 +3,11 @@ name: Android Release CI
 on:
   push:
     tags:
-      - 'v*'    # Only runs when you push a version tag like v1.0
+      - 'v*'  # Only runs when you push a version tag like v1.0
 
+permissions:
+  contents: write
+  
 jobs:
   build:
     runs-on: ubuntu-latest
